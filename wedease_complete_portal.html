@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-light:#E8C96B;--gold-dark:#9A7520;--gold-pale:#FAF3DC;
+  --ivory:#FDFAF2;--white:#FFFFFF;--charcoal:#1A1810;--charcoal-med:#2E2A1E;
+  --charcoal-light:#4A4538;--muted:#8A8070;--muted-light:#B8AE98;
+  --border:rgba(201,168,76,0.2);--border-strong:rgba(201,168,76,0.45);
+  --surface:rgba(250,243,220,0.35);--surface-card:#FFFFFF;
+  --radius:12px;--radius-lg:20px;--radius-xl:28px;
+  --shadow:0 2px 20px rgba(201,168,76,0.08);--shadow-lg:0 8px 40px rgba(201,168,76,0.14);
+  --font-display:'Cormorant Garamond',serif;--font-body:'Jost',sans-serif;
+}
+.dark{
+  --ivory:#0E0C08;--white:#1A1810;--charcoal:#F0EAD6;--charcoal-med:#D4C9A8;
+  --charcoal-light:#B8AE98;--muted:#8A8070;--muted-light:#6A6050;
+  --border:rgba(201,168,76,0.18);--border-strong:rgba(201,168,76,0.38);
+  --surface:rgba(201,168,76,0.06);--surface-card:#1A1810;
+  --shadow:0 2px 20px rgba(0,0,0,0.3);--shadow-lg:0 8px 40px rgba(0,0,0,0.4);
+}
+body{font-family:var(--font-body);background:var(--ivory);color:var(--charcoal);min-height:100vh;font-size:15px;line-height:1.6;transition:background 0.3s,color 0.3s}
+h1,h2,h3,h4,h5{font-family:var(--font-display);font-weight:600;line-height:1.2}
+button{cursor:pointer;font-family:var(--font-body);border:none;outline:none}
+input,select,textarea{font-family:var(--font-body);outline:none}
+a{text-decoration:none;color:inherit}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+
+/* ── Layout ── */
+.app{display:flex;flex-direction:column;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--gold);letter-spacing:0.04em;display:flex;align-items:center;gap:8px}
+.topbar-logo i{font-size:22px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.main-layout{display:flex;flex:1}
+.sidebar{width:230px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);padding:16px 10px;display:flex;flex-direction:column;gap:2px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto}
+.page-content{flex:1;padding:28px 32px;max-width:1100px;overflow:hidden}
+.mobile-sidebar-hidden .sidebar{display:none}
+
+/* ── Sidebar ── */
+.nav-section-label{font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);padding:12px 12px 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;font-size:14px;font-weight:400;color:var(--charcoal-light);transition:all 0.18s;cursor:pointer;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface);color:var(--charcoal)}
+.nav-item.active{background:linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.08));color:var(--gold-dark);font-weight:500;border:1px solid var(--border)}
+.nav-item i{font-size:17px;flex-shrink:0}
+.nav-divider{height:1px;background:var(--border);margin:8px 0}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:9px;font-size:14px;font-weight:500;transition:all 0.18s;cursor:pointer;border:none}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#fff;box-shadow:0 2px 12px rgba(201,168,76,0.3)}
+.btn-gold:hover{box-shadow:0 4px 20px rgba(201,168,76,0.45);transform:translateY(-1px)}
+.btn-outline{background:transparent;border:1px solid var(--border-strong);color:var(--gold-dark)}
+.btn-outline:hover{background:var(--surface)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface);color:var(--charcoal)}
+.btn-danger{background:#FEE2E2;color:#991B1B;border:1px solid #FECACA}
+.btn-sm{padding:6px 13px;font-size:13px}
+.btn-icon{width:36px;height:36px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--muted);transition:all 0.18s}
+.btn-icon:hover{background:var(--surface);color:var(--gold)}
+
+/* ── Cards ── */
+.card{background:var(--surface-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow)}
+.card-gold{border-color:var(--border-strong);background:linear-gradient(135deg,rgba(201,168,76,0.06),rgba(201,168,76,0.02))}
+.stat-card{background:var(--surface-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;background:radial-gradient(circle,rgba(201,168,76,0.12) 0%,transparent 70%)}
+.stat-label{font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+.stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--charcoal)}
+.stat-change{font-size:12px;margin-top:4px}
+.stat-up{color:#059669}.stat-down{color:#DC2626}
+
+/* ── Badges / Chips ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500}
+.badge-gold{background:rgba(201,168,76,0.15);color:var(--gold-dark);border:1px solid var(--border-strong)}
+.badge-green{background:#DCFCE7;color:#15803D;border:1px solid #BBF7D0}
+.badge-red{background:#FEE2E2;color:#991B1B;border:1px solid #FECACA}
+.badge-blue{background:#DBEAFE;color:#1D4ED8;border:1px solid #BFDBFE}
+.badge-gray{background:var(--surface);color:var(--muted);border:1px solid var(--border)}
+
+/* ── Forms ── */
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:13px;font-weight:500;color:var(--charcoal-light);margin-bottom:6px}
+.form-input{width:100%;padding:10px 14px;border:1px solid var(--border-strong);border-radius:9px;background:var(--white);color:var(--charcoal);font-size:14px;transition:border-color 0.18s}
+.form-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.12)}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%238A8070' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+
+/* ── Tables ── */
+.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead tr{background:var(--surface);border-bottom:1px solid var(--border)}
+thead th{padding:11px 16px;text-align:left;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--surface)}
+tbody td{padding:12px 16px;color:var(--charcoal)}
+
+/* ── Progress ── */
+.progress{height:6px;background:var(--border);border-radius:99px;overflow:hidden}
+.progress-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width 0.5s}
+
+/* ── Tabs ── */
+.tabs{display:flex;gap:4px;background:var(--surface);padding:4px;border-radius:10px;margin-bottom:20px}
+.tab{flex:1;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);border:none;background:none;cursor:pointer;transition:all 0.18s;text-align:center}
+.tab.active{background:var(--surface-card);color:var(--gold-dark);box-shadow:0 1px 6px rgba(201,168,76,0.15);border:1px solid var(--border)}
+
+/* ── Rating Stars ── */
+.stars{display:flex;gap:2px}.star{color:#E8C96B;font-size:14px}.star-empty{color:var(--border)}
+
+/* ── Avatar ── */
+.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff;flex-shrink:0}
+.avatar-lg{width:54px;height:54px;font-size:20px}
+
+/* ── Modal ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--white);border-radius:var(--radius-xl);padding:32px;max-width:520px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-lg);border:1px solid var(--border)}
+.modal-title{font-family:var(--font-display);font-size:22px;font-weight:600;margin-bottom:20px;color:var(--charcoal)}
+
+/* ── Gold decorative ── */
+.gold-line{height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border:none;margin:20px 0}
+.section-title{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--charcoal);margin-bottom:4px}
+.section-sub{font-size:14px;color:var(--muted);margin-bottom:24px}
+.page-header{margin-bottom:28px}
+.page-header-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* ── Grid layouts ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+
+/* ── Vendor card ── */
+.vendor-card{background:var(--surface-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:box-shadow 0.2s,transform 0.2s}
+.vendor-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.vendor-card-img{height:160px;background:linear-gradient(135deg,var(--gold-pale),rgba(201,168,76,0.2));display:flex;align-items:center;justify-content:center;position:relative}
+.vendor-card-img i{font-size:48px;color:var(--gold)}
+.vendor-card-body{padding:16px}
+.vendor-name{font-family:var(--font-display);font-size:18px;font-weight:600;margin-bottom:4px}
+.vendor-meta{font-size:13px;color:var(--muted);margin-bottom:10px}
+.vendor-price{font-size:15px;font-weight:600;color:var(--gold-dark)}
+
+/* ── Checklist ── */
+.checklist-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.checklist-item:last-child{border:none}
+.check-box{width:20px;height:20px;border-radius:5px;border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.18s}
+.check-box.checked{background:var(--gold);border-color:var(--gold)}
+.check-box.checked i{color:#fff;font-size:13px}
+
+/* ── Guest table ── */
+.guest-row-actions{display:flex;gap:6px;opacity:0;transition:opacity 0.18s}
+tbody tr:hover .guest-row-actions{opacity:1}
+
+/* ── Budget ── */
+.budget-category{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
+.budget-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* ── Gallery ── */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.gallery-item{aspect-ratio:1;border-radius:10px;overflow:hidden;position:relative;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.18s}
+.gallery-item:hover{transform:scale(1.03)}
+.gallery-item i{font-size:32px;color:var(--muted-light)}
+
+/* ── Invitation ── */
+.invitation-card{background:linear-gradient(145deg,#FEFCF3,#FFF8E7);border:2px solid var(--gold);border-radius:var(--radius-xl);padding:40px;text-align:center;position:relative;overflow:hidden}
+.invitation-card::before,.invitation-card::after{content:'';position:absolute;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.1),transparent)}
+.invitation-card::before{top:-30px;left:-30px}
+.invitation-card::after{bottom:-30px;right:-30px}
+.inv-title{font-family:var(--font-display);font-size:38px;font-style:italic;color:var(--gold-dark);margin:12px 0}
+.inv-couple{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--charcoal);margin-bottom:16px}
+.inv-details{font-size:14px;color:var(--charcoal-light);line-height:2}
+
+/* ── Auth ── */
+.auth-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FDFAF2 0%,#FAF3DC 50%,#FDFAF2 100%);padding:24px}
+.auth-card{background:var(--white);border:1px solid var(--border-strong);border-radius:var(--radius-xl);padding:44px;width:100%;max-width:440px;box-shadow:var(--shadow-lg)}
+.auth-logo{text-align:center;margin-bottom:32px}
+.auth-logo h1{font-family:var(--font-display);font-size:36px;font-weight:700;color:var(--gold);letter-spacing:0.04em}
+.auth-logo p{font-size:14px;color:var(--muted);margin-top:4px}
+
+/* ── Website generator ── */
+.website-preview{border:2px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;font-family:var(--font-display)}
+.wp-hero{padding:60px 32px;text-align:center;background:linear-gradient(135deg,#1A1810,#2E2A1E);color:#fff;position:relative}
+.wp-hero-gold{font-size:48px;font-weight:700;color:var(--gold-light);margin:8px 0}
+.wp-section{padding:40px 32px;text-align:center}
+
+/* ── Countdown ── */
+.countdown{display:flex;gap:12px;justify-content:center;margin:20px 0}
+.countdown-unit{background:var(--surface-card);border:1px solid var(--border-strong);border-radius:12px;padding:16px 20px;text-align:center;min-width:72px}
+.countdown-num{font-family:var(--font-display);font-size:36px;font-weight:700;color:var(--gold-dark);line-height:1}
+.countdown-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px}
+
+/* ── Dark mode toggle ── */
+.dark-toggle{background:none;border:1px solid var(--border);border-radius:20px;padding:6px 12px;display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:var(--charcoal);transition:all 0.2s}
+.dark-toggle:hover{background:var(--surface)}
+
+/* ── Language toggle ── */
+.lang-toggle{background:none;border:1px solid var(--border);border-radius:7px;padding:5px 10px;font-size:13px;font-weight:600;color:var(--gold-dark);cursor:pointer;transition:all 0.18s}
+.lang-toggle:hover{background:var(--surface)}
+
+/* ── Notifications ── */
+.notif-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;position:absolute;top:2px;right:2px}
+
+/* ── Animations ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp 0.4s ease both}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .sidebar{display:none}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .page-content{padding:16px}.topbar{padding:0 16px}
+  .grid-auto{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const TRANSLATIONS = {
+  en:{
+    dashboard:'Dashboard',vendors:'Vendors',guests:'Guests',budget:'Budget',checklist:'Checklist',
+    invitations:'Invitations',gallery:'Gallery',website:'My Website',admin:'Admin Panel',
+    login:'Login',register:'Register',darkMode:'Dark Mode',language:'தமிழ்',
+    weddingDate:'Wedding Date',totalBudget:'Total Budget',guestsConfirmed:'Guests Confirmed',
+    tasksLeft:'Tasks Left',vendorSearch:'Search vendors…',addGuest:'Add Guest',
+    firstName:'First Name',lastName:'Last Name',email:'Email',phone:'Phone',
+    rsvpStatus:'RSVP Status',table:'Table',confirmed:'Confirmed',pending:'Pending',declined:'Declined',
+    category:'Category',allocated:'Allocated',spent:'Spent',remaining:'Remaining',
+    saveChanges:'Save Changes',cancel:'Cancel',bookNow:'Book Now',viewProfile:'View Profile',
+    bride:'Bride',groom:'Groom',weddingTitle:'Wedding Bells…',loading:'Loading WedEase…',
+  },
+  ta:{
+    dashboard:'டாஷ்போர்டு',vendors:'விற்பனையாளர்கள்',guests:'விருந்தினர்கள்',budget:'பட்ஜெட்',
+    checklist:'செக்லிஸ்ட்',invitations:'அழைப்பிதழ்கள்',gallery:'கேலரி',
+    website:'என் வெப்சைட்',admin:'நிர்வாக பலகை',login:'உள்நுழைய',register:'பதிவு செய்',
+    darkMode:'இருண்ட பயன்முறை',language:'English',weddingDate:'திருமண தேதி',
+    totalBudget:'மொத்த பட்ஜெட்',guestsConfirmed:'உறுதிப்படுத்தப்பட்ட விருந்தினர்கள்',
+    tasksLeft:'மீதமுள்ள பணிகள்',vendorSearch:'விற்பனையாளரை தேடுங்கள்…',
+    addGuest:'விருந்தினரை சேர்',firstName:'முதல் பெயர்',lastName:'கடைசி பெயர்',
+    email:'மின்னஞ்சல்',phone:'தொலைபேசி',rsvpStatus:'RSVP நிலை',table:'மேசை',
+    confirmed:'உறுதிப்படுத்தப்பட்டது',pending:'நிலுவையில்',declined:'மறுக்கப்பட்டது',
+    category:'வகை',allocated:'ஒதுக்கப்பட்டது',spent:'செலவிட்டது',remaining:'மீதமுள்ளது',
+    saveChanges:'மாற்றங்களை சேமி',cancel:'ரத்து செய்',bookNow:'இப்போது முன்பதிவு செய்',
+    viewProfile:'சுயவிவரத்தை பார்',bride:'மணமகள்',groom:'மணமகன்',
+    weddingTitle:'திருமண மணிகள்…',loading:'WedEase ஏற்றுகிறது…',
+  }
+};
+
+const VENDORS = [
+  {id:1,cat:'Hall',name:'Royal Palace Banquet',loc:'Chennai',price:'₹1,20,000',rating:4.8,reviews:128,icon:'ti-building',desc:'Elegant 500-seat banquet hall with garden, air conditioning & valet parking.',available:true,booked:false},
+  {id:2,cat:'Hall',name:'Golden Gate Mahal',loc:'Coimbatore',price:'₹85,000',rating:4.6,reviews:94,icon:'ti-building',desc:'Traditional mandapam with modern amenities, natural lighting, 350 capacity.',available:true,booked:false},
+  {id:3,cat:'Photography',name:'Lumina Frames Studio',loc:'Chennai',price:'₹45,000',rating:4.9,reviews:212,icon:'ti-camera',desc:'Award-winning wedding photographers, cinematic video, drone shots included.',available:true,booked:true},
+  {id:4,cat:'Photography',name:'Moments & Memories',loc:'Salem',price:'₹28,000',rating:4.5,reviews:67,icon:'ti-camera',desc:'Candid & traditional photography, engagement shoots, same-day edits.',available:false,booked:false},
+  {id:5,cat:'Makeup',name:'Glow Bridal Studio',loc:'Chennai',price:'₹15,000',rating:5.0,reviews:189,icon:'ti-sparkles',desc:'HD & airbrush bridal makeup, trial sessions, South Indian & designer looks.',available:true,booked:false},
+  {id:6,cat:'Makeup',name:'Priya Beauty Lounge',loc:'Madurai',price:'₹9,500',rating:4.7,reviews:103,icon:'ti-sparkles',desc:'Traditional bridal makeup, silk saree draping, mehendi artistry.',available:true,booked:false},
+  {id:7,cat:'Catering',name:'Saraswathi Catering',loc:'Coimbatore',price:'₹650/plate',rating:4.8,reviews:156,icon:'ti-chef-hat',desc:'Authentic Tamil Nadu cuisine, 200+ menu items, eco-friendly banana leaf service.',available:true,booked:false},
+  {id:8,cat:'Catering',name:'Grand Feast Services',loc:'Chennai',price:'₹850/plate',rating:4.6,reviews:88,icon:'ti-chef-hat',desc:'Multi-cuisine, live counters, dessert stations, professional service staff.',available:true,booked:false},
+  {id:9,cat:'Decor',name:'Floral Dreams Decor',loc:'Trichy',price:'₹40,000',rating:4.7,reviews:74,icon:'ti-flower',desc:'Fresh floral mandap, stage decoration, entrance arches, table centrepieces.',available:true,booked:false},
+  {id:10,cat:'Music',name:'Harmony Live Band',loc:'Chennai',price:'₹22,000',rating:4.4,reviews:52,icon:'ti-music',desc:'Live Carnatic & fusion music, DJ services, sound system setup included.',available:true,booked:false},
+];
+
+let GUESTS = [
+  {id:1,first:'Priya',last:'Sharma',email:'priya@email.com',phone:'9876543210',rsvp:'Confirmed',table:1,dietary:'Vegetarian'},
+  {id:2,first:'Arjun',last:'Kumar',email:'arjun@email.com',phone:'9876543211',rsvp:'Confirmed',table:1,dietary:'Non-Veg'},
+  {id:3,first:'Meena',last:'Raj',email:'meena@email.com',phone:'9876543212',rsvp:'Pending',table:2,dietary:'Vegetarian'},
+  {id:4,first:'Karthik',last:'Nair',email:'karthik@email.com',phone:'9876543213',rsvp:'Declined',table:null,dietary:'Vegan'},
+  {id:5,first:'Divya',last:'Pillai',email:'divya@email.com',phone:'9876543214',rsvp:'Confirmed',table:2,dietary:'Vegetarian'},
+  {id:6,first:'Ramesh',last:'Iyer',email:'ramesh@email.com',phone:'9876543215',rsvp:'Pending',table:3,dietary:'Non-Veg'},
+];
+
+const BUDGET_CATS = [
+  {cat:'Venue & Hall',allocated:150000,spent:120000,color:'#C9A84C'},
+  {cat:'Catering',allocated:180000,spent:95000,color:'#E8A87C'},
+  {cat:'Photography',allocated:60000,spent:45000,color:'#7CB9E8'},
+  {cat:'Makeup & Beauty',allocated:25000,spent:15000,color:'#D4A5C9'},
+  {cat:'Decoration',allocated:45000,spent:40000,color:'#90C9A0'},
+  {cat:'Music & DJ',allocated:25000,spent:22000,color:'#F0C060'},
+  {cat:'Attire',allocated:80000,spent:68000,color:'#C0A060'},
+  {cat:'Invitations',allocated:15000,spent:8000,color:'#A0B8C0'},
+  {cat:'Jewellery',allocated:120000,spent:110000,color:'#D4AF37'},
+  {cat:'Miscellaneous',allocated:30000,spent:12000,color:'#B0B0B0'},
+];
+
+let CHECKLIST = [
+  {id:1,task:'Book wedding venue',cat:'Venue',done:true,dueDate:'2024-11-15'},
+  {id:2,task:'Send invitations to guests',cat:'Admin',done:true,dueDate:'2024-12-01'},
+  {id:3,task:'Book photographer & videographer',cat:'Media',done:true,dueDate:'2024-11-20'},
+  {id:4,task:'Finalize catering menu',cat:'Food',done:false,dueDate:'2024-12-20'},
+  {id:5,task:'Book bridal makeup artist',cat:'Beauty',done:true,dueDate:'2024-11-25'},
+  {id:6,task:'Arrange accommodation for outstation guests',cat:'Logistics',done:false,dueDate:'2024-12-15'},
+  {id:7,task:'Order wedding cake',cat:'Food',done:false,dueDate:'2025-01-05'},
+  {id:8,task:'Confirm flower decoration',cat:'Decor',done:true,dueDate:'2024-12-10'},
+  {id:9,task:'Prepare seating chart',cat:'Admin',done:false,dueDate:'2025-01-10'},
+  {id:10,task:'Book honeymoon package',cat:'Travel',done:false,dueDate:'2025-01-15'},
+  {id:11,task:'Final dress fitting',cat:'Attire',done:true,dueDate:'2024-12-28'},
+  {id:12,task:'Arrange transport for guests',cat:'Logistics',done:false,dueDate:'2025-01-12'},
+];
+
+const ADMIN_USERS = [
+  {id:1,name:'Sarah Johnson',email:'sarah@email.com',role:'Couple',plan:'Premium',joined:'Oct 2024',status:'Active'},
+  {id:2,name:'Karthik Studio',email:'karthik@studio.com',role:'Vendor',plan:'Pro',joined:'Sep 2024',status:'Active'},
+  {id:3,name:'Meena Nair',email:'meena@email.com',role:'Couple',plan:'Basic',joined:'Nov 2024',status:'Active'},
+  {id:4,name:'Floral Dreams',email:'floral@decor.com',role:'Vendor',plan:'Starter',joined:'Aug 2024',status:'Pending'},
+  {id:5,name:'Ramesh Kumar',email:'ramesh@email.com',role:'Couple',plan:'Premium',joined:'Nov 2024',status:'Active'},
+];
+
+// ─── STATE ──────────────────────────────────────────────────────────────────
+let state = {
+  page: 'auth',
+  authMode: 'login',
+  lang: 'en',
+  dark: false,
+  user: null,
+  userRole: 'couple',
+  vendors: [...VENDORS],
+  guests: [...GUESTS],
+  checklist: [...CHECKLIST],
+  vendorFilter: 'All',
+  vendorSearch: '',
+  modal: null,
+  budgetTotal: 730000,
+  weddingDate: '2025-02-14',
+  brideGroom: {bride:'Sarah',groom:'Rajan'},
+  checklistFilter: 'All',
+  guestSearch: '',
+  invTemplate: 0,
+  websiteTheme: 0,
+  adminTab: 'users',
+  dashTab: 'overview',
+  notif: false,
+};
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+const t = k => (TRANSLATIONS[state.lang][k] || k);
+const fmt = n => '₹' + Number(n).toLocaleString('en-IN');
+const fmtK = n => n >= 100000 ? '₹' + (n/100000).toFixed(1) + 'L' : '₹' + Math.round(n/1000) + 'K';
+
+function countdown(target) {
+  const now = new Date(), end = new Date(target);
+  const diff = end - now;
+  if(diff <= 0) return {d:0,h:0,m:0,s:0};
+  return {
+    d: Math.floor(diff/86400000),
+    h: Math.floor((diff%86400000)/3600000),
+    m: Math.floor((diff%3600000)/60000),
+    s: Math.floor((diff%60000)/1000)
+  };
+}
+
+function stars(n) {
+  return Array(5).fill(0).map((_,i) =>
+    `<span class="${i < Math.floor(n) ? 'star' : 'star-empty'}">★</span>`
+  ).join('');
+}
+
+function initials(s) { return s.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
+
+// ─── RENDER ENGINE ───────────────────────────────────────────────────────────
+function render() {
+  const root = document.getElementById('root');
+  if(state.page === 'auth') { root.innerHTML = renderAuth(); bindAuth(); return; }
+  root.innerHTML = renderLayout();
+  bindAll();
+  renderCharts();
+  if(state.modal) renderModal();
+  document.body.className = state.dark ? 'dark' : '';
+  startCountdown();
+}
+
+function startCountdown() {
+  if(!document.getElementById('cd-d')) return;
+  const tick = () => {
+    const c = countdown(state.weddingDate);
+    const el = id => document.getElementById(id);
+    if(el('cd-d')) { el('cd-d').textContent=c.d; el('cd-h').textContent=c.h; el('cd-m').textContent=c.m; el('cd-s').textContent=c.s; }
+  };
+  tick();
+  clearInterval(window._cdTimer);
+  window._cdTimer = setInterval(tick, 1000);
+}
+
+// ─── AUTH ───────────────────────────────────────────────────────────────────
+function renderAuth() {
+  const m = state.authMode;
+  return `
+  <div class="auth-page">
+    <div class="auth-card fade-up">
+      <div class="auth-logo">
+        <h1>WedEase</h1>
+        <p>Your dream wedding, beautifully planned</p>
+      </div>
+      <div class="tabs" style="margin-bottom:24px">
+        <button class="tab ${m==='login'?'active':''}" onclick="setState({authMode:'login'})">Login</button>
+        <button class="tab ${m==='register'?'active':''}" onclick="setState({authMode:'register'})">Register</button>
+      </div>
+      ${m==='register'?`
+      <div class="form-group">
+        <label class="form-label">I am</label>
+        <div style="display:flex;gap:10px;margin-top:4px">
+          <button class="btn ${state.userRole==='couple'?'btn-gold':'btn-ghost'} btn-sm" onclick="setState({userRole:'couple'})">💑 Couple</button>
+          <button class="btn ${state.userRole==='vendor'?'btn-gold':'btn-ghost'} btn-sm" onclick="setState({userRole:'vendor'})">🏢 Vendor</button>
+          <button class="btn ${state.userRole==='admin'?'btn-gold':'btn-ghost'} btn-sm" onclick="setState({userRole:'admin'})">⚙️ Admin</button>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">First Name</label><input class="form-input" placeholder="Sarah"></div>
+        <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" placeholder="Johnson"></div>
+      </div>
+      `:''}
+      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="hello@email.com"></div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" placeholder="••••••••">
+        ${m==='login'?'<div style="text-align:right;margin-top:6px"><a href="#" style="font-size:13px;color:var(--gold-dark)">Forgot password?</a></div>':''}
+      </div>
+      ${m==='register'?`<div class="form-group"><label class="form-label">Wedding Date</label><input class="form-input" type="date" value="2025-02-14"></div>`:''}
+      <button class="btn btn-gold" style="width:100%;justify-content:center;padding:12px" onclick="doLogin()">
+        ${m==='login'?'Sign In →':'Create Account →'}
+      </button>
+      <hr class="gold-line">
+      <button class="btn btn-outline" style="width:100%;justify-content:center" onclick="doLogin()">
+        <i class="ti ti-brand-google" aria-hidden="true"></i> Continue with Google
+      </button>
+      <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:16px">
+        By continuing, you agree to our <a href="#" style="color:var(--gold-dark)">Terms of Service</a>
+      </p>
+    </div>
+  </div>`;
+}
+
+function bindAuth() {
+  document.body.className = '';
+}
+
+function doLogin() {
+  state.user = {name:'Sarah Johnson',email:'sarah@email.com'};
+  state.page = state.userRole==='admin' ? 'admin' : state.userRole==='vendor' ? 'vendor' : 'dashboard';
+  render();
+}
+
+// ─── LAYOUT ─────────────────────────────────────────────────────────────────
+function renderLayout() {
+  return `
+  <div class="app">
+    ${renderTopbar()}
+    <div class="main-layout">
+      ${renderSidebar()}
+      <main class="page-content fade-up">
+        ${renderPage()}
+      </main>
+    </div>
+  </div>
+  ${state.modal ? `<div class="modal-overlay" onclick="closeModal(event)">${renderModal()}</div>` : ''}
+  `;
+}
+
+function renderTopbar() {
+  return `
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="topbar-logo"><i class="ti ti-diamond" aria-hidden="true"></i> WedEase</div>
+      <span style="font-size:12px;color:var(--muted);display:none" id="mobile-menu-btn">☰</span>
+    </div>
+    <div class="topbar-right">
+      <button class="lang-toggle" onclick="toggleLang()">${t('language')}</button>
+      <button class="dark-toggle" onclick="toggleDark()">
+        <i class="ti ${state.dark?'ti-sun':'ti-moon'}" aria-hidden="true"></i>
+        ${state.dark?'Light':'Dark'}
+      </button>
+      <div style="position:relative">
+        <button class="btn-icon" onclick="setState({notif:!state.notif})"><i class="ti ti-bell" aria-hidden="true"></i></button>
+        <div class="notif-dot"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="avatar">${initials(state.user?.name||'U')}</div>
+        <div style="display:none;flex-direction:column">
+          <span style="font-size:13px;font-weight:500">${state.user?.name||''}</span>
+          <span style="font-size:11px;color:var(--muted)">${state.userRole}</span>
+        </div>
+      </div>
+      <button class="btn-icon" onclick="doLogout()" title="Logout"><i class="ti ti-logout" aria-hidden="true"></i></button>
+    </div>
+  </header>`;
+}
+
+function renderSidebar() {
+  const isAdmin = state.userRole==='admin', isVendor = state.userRole==='vendor';
+  const items = isAdmin ? [
+    {page:'admin',icon:'ti-layout-dashboard',label:t('admin')},
+    {page:'a-users',icon:'ti-users',label:'Users'},
+    {page:'a-vendors',icon:'ti-building-store',label:'Vendors'},
+    {page:'a-bookings',icon:'ti-calendar-check',label:'Bookings'},
+    {page:'a-analytics',icon:'ti-chart-bar',label:'Analytics'},
+  ] : isVendor ? [
+    {page:'vendor',icon:'ti-layout-dashboard',label:t('dashboard')},
+    {page:'v-bookings',icon:'ti-calendar',label:'Bookings'},
+    {page:'v-portfolio',icon:'ti-camera',label:'Portfolio'},
+    {page:'v-reviews',icon:'ti-star',label:'Reviews'},
+    {page:'v-settings',icon:'ti-settings',label:'Settings'},
+  ] : [
+    {page:'dashboard',icon:'ti-layout-dashboard',label:t('dashboard')},
+    {page:'vendors',icon:'ti-building-store',label:t('vendors')},
+    {page:'guests',icon:'ti-users',label:t('guests')},
+    {page:'budget',icon:'ti-wallet',label:t('budget')},
+    {page:'checklist',icon:'ti-list-check',label:t('checklist')},
+    {page:'invitations',icon:'ti-mail',label:t('invitations')},
+    {page:'gallery',icon:'ti-photo',label:t('gallery')},
+    {page:'website',icon:'ti-world',label:t('website')},
+  ];
+
+  return `
+  <nav class="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="nav-section-label">Navigation</div>
+    ${items.map(i=>`
+      <button class="nav-item ${state.page===i.page?'active':''}" onclick="setState({page:'${i.page}'})">
+        <i class="ti ${i.icon}" aria-hidden="true"></i> ${i.label}
+      </button>
+    `).join('')}
+    ${!isAdmin&&!isVendor?`
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">Account</div>
+    <button class="nav-item ${state.page==='admin'?'active':''}" onclick="setState({page:'admin',userRole:'admin'})">
+      <i class="ti ti-shield" aria-hidden="true"></i> Admin Panel
+    </button>`:''}
+  </nav>`;
+}
+
+// ─── PAGE ROUTER ─────────────────────────────────────────────────────────────
+function renderPage() {
+  switch(state.page) {
+    case 'dashboard': return renderDashboard();
+    case 'vendors': return renderVendors();
+    case 'guests': return renderGuests();
+    case 'budget': return renderBudget();
+    case 'checklist': return renderChecklist();
+    case 'invitations': return renderInvitations();
+    case 'gallery': return renderGallery();
+    case 'website': return renderWebsite();
+    case 'admin': case 'a-users': case 'a-vendors': case 'a-bookings': case 'a-analytics': return renderAdmin();
+    case 'vendor': case 'v-bookings': case 'v-portfolio': case 'v-reviews': case 'v-settings': return renderVendorDash();
+    default: return renderDashboard();
+  }
+}
+
+// ─── DASHBOARD ───────────────────────────────────────────────────────────────
+function renderDashboard() {
+  const totalBudget = BUDGET_CATS.reduce((s,c)=>s+c.allocated,0);
+  const totalSpent = BUDGET_CATS.reduce((s,c)=>s+c.spent,0);
+  const confirmed = state.guests.filter(g=>g.rsvp==='Confirmed').length;
+  const doneCount = state.checklist.filter(c=>c.done).length;
+  const remaining = state.checklist.filter(c=>!c.done).length;
+  const budgetPct = Math.round((totalSpent/totalBudget)*100);
+
+  return `
+  <div>
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h2 class="section-title">Welcome back, ${state.brideGroom.bride} & ${state.brideGroom.groom} 💍</h2>
+          <p class="section-sub">Your wedding is beautifully coming together</p>
+        </div>
+        <div class="countdown">
+          <div class="countdown-unit"><div class="countdown-num" id="cd-d">--</div><div class="countdown-label">Days</div></div>
+          <div class="countdown-unit"><div class="countdown-num" id="cd-h">--</div><div class="countdown-label">Hrs</div></div>
+          <div class="countdown-unit"><div class="countdown-num" id="cd-m">--</div><div class="countdown-label">Min</div></div>
+          <div class="countdown-unit"><div class="countdown-num" id="cd-s">--</div><div class="countdown-label">Sec</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:24px">
+      <div class="stat-card">
+        <div class="stat-label">${t('weddingDate')}</div>
+        <div class="stat-value" style="font-size:18px">Feb 14, 2025</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Valentine's Day ♥</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">${t('totalBudget')}</div>
+        <div class="stat-value">${fmtK(totalSpent)}</div>
+        <div class="stat-change stat-up"><i class="ti ti-trending-up" aria-hidden="true"></i> ${budgetPct}% used of ${fmtK(totalBudget)}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">${t('guestsConfirmed')}</div>
+        <div class="stat-value">${confirmed}</div>
+        <div class="stat-change stat-up"><i class="ti ti-users" aria-hidden="true"></i> ${state.guests.length} total invited</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">${t('tasksLeft')}</div>
+        <div class="stat-value">${remaining}</div>
+        <div class="stat-change stat-up"><i class="ti ti-check" aria-hidden="true"></i> ${doneCount}/${state.checklist.length} completed</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="card">
+        <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:16px">Budget Overview</h3>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:13px;color:var(--muted)">Spent: ${fmt(totalSpent)}</span>
+          <span style="font-size:13px;color:var(--muted)">Budget: ${fmt(totalBudget)}</span>
+        </div>
+        <div class="progress" style="height:10px;margin-bottom:16px"><div class="progress-bar" style="width:${budgetPct}%"></div></div>
+        <div style="position:relative;height:200px"><canvas id="chartBudget" role="img" aria-label="Budget doughnut chart"></canvas></div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:16px">Upcoming Tasks</h3>
+        ${state.checklist.filter(c=>!c.done).slice(0,5).map(c=>`
+          <div class="checklist-item">
+            <div class="check-box" onclick="toggleCheck(${c.id})"><i class="ti ti-check" aria-hidden="true"></i></div>
+            <div style="flex:1">
+              <div style="font-size:14px">${c.task}</div>
+              <div style="font-size:12px;color:var(--muted)">${c.cat} • Due: ${c.dueDate}</div>
+            </div>
+            <span class="badge badge-gold" style="font-size:11px">${c.cat}</span>
+          </div>
+        `).join('')}
+        <button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="setState({page:'checklist'})">View All Tasks →</button>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card card-gold">
+        <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Booked Vendors</h3>
+        ${state.vendors.filter(v=>v.booked).map(v=>`
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+            <div class="avatar" style="background:var(--surface);color:var(--gold-dark);font-size:16px"><i class="ti ${v.icon}" aria-hidden="true"></i></div>
+            <div>
+              <div style="font-size:14px;font-weight:500">${v.name}</div>
+              <div style="font-size:12px;color:var(--muted)">${v.cat} • ${v.price}</div>
+            </div>
+          </div>
+        `).join('')||'<p style="color:var(--muted);font-size:14px">No vendors booked yet</p>'}
+        <button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="setState({page:'vendors'})">Browse Vendors →</button>
+      </div>
+
+      <div class="card">
+        <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Guest Summary</h3>
+        <div style="position:relative;height:180px"><canvas id="chartGuest" role="img" aria-label="Guest RSVP status pie chart"></canvas></div>
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+          ${[['Confirmed','#059669'],['Pending','#D97706'],['Declined','#DC2626']].map(([l,c])=>{
+            const cnt = state.guests.filter(g=>g.rsvp===l).length;
+            return `<span style="display:flex;align-items:center;gap:4px;font-size:12px"><span style="width:10px;height:10px;border-radius:2px;background:${c};display:inline-block"></span>${l}: ${cnt}</span>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Quick Actions</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          ${[
+            ['ti-user-plus','Add Guest',()=>`setState({page:'guests',modal:'addGuest'})`],
+            ['ti-building-store','Find Vendors',()=>`setState({page:'vendors'})`],
+            ['ti-mail','Send Invitations',()=>`setState({page:'invitations'})`],
+            ['ti-photo','Upload Photos',()=>`setState({page:'gallery'})`],
+            ['ti-world','Edit Website',()=>`setState({page:'website'})`],
+          ].map(([icon,label,action])=>`
+            <button class="btn btn-ghost" style="justify-content:flex-start" onclick="${action()}()">
+              <i class="ti ${icon}" aria-hidden="true"></i> ${label}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── VENDORS ─────────────────────────────────────────────────────────────────
+function renderVendors() {
+  const cats = ['All','Hall','Photography','Makeup','Catering','Decor','Music'];
+  const filtered = state.vendors.filter(v => {
+    const catOk = state.vendorFilter==='All' || v.cat===state.vendorFilter;
+    const searchOk = !state.vendorSearch || v.name.toLowerCase().includes(state.vendorSearch.toLowerCase()) || v.loc.toLowerCase().includes(state.vendorSearch.toLowerCase());
+    return catOk && searchOk;
+  });
+
+  return `
+  <div>
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h2 class="section-title">Vendor Marketplace</h2>
+          <p class="section-sub">Book trusted vendors for your perfect day</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px;position:relative">
+        <i class="ti ti-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:16px" aria-hidden="true"></i>
+        <input class="form-input" style="padding-left:36px" placeholder="${t('vendorSearch')}" value="${state.vendorSearch}" oninput="setState({vendorSearch:this.value})">
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${cats.map(c=>`<button class="btn ${state.vendorFilter===c?'btn-gold':'btn-ghost'} btn-sm" onclick="setState({vendorFilter:'${c}'})">${c}</button>`).join('')}
+      </div>
+    </div>
+
+    <div class="grid-auto">
+      ${filtered.map(v=>`
+        <div class="vendor-card">
+          <div class="vendor-card-img">
+            <i class="ti ${v.icon}" aria-hidden="true"></i>
+            ${v.booked?'<span class="badge badge-green" style="position:absolute;top:10px;right:10px">✓ Booked</span>':''}
+            ${!v.available?'<span class="badge badge-gray" style="position:absolute;top:10px;left:10px">Unavailable</span>':''}
+          </div>
+          <div class="vendor-card-body">
+            <span class="badge badge-gold" style="margin-bottom:8px;font-size:11px">${v.cat}</span>
+            <div class="vendor-name">${v.name}</div>
+            <div class="vendor-meta"><i class="ti ti-map-pin" style="font-size:13px" aria-hidden="true"></i> ${v.loc} &nbsp; <div class="stars" style="display:inline-flex">${stars(v.rating)}</div> (${v.reviews})</div>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.5">${v.desc}</p>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="vendor-price">${v.price}</span>
+              <button class="btn ${v.booked?'btn-ghost':'btn-gold'} btn-sm" onclick="openVendorModal(${v.id})">
+                ${v.booked?'Booked ✓':t('bookNow')}
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+function openVendorModal(id) {
+  const v = state.vendors.find(x=>x.id===id);
+  if(!v) return;
+  const html = `
+    <div class="modal" onclick="event.stopPropagation()">
+      <h3 class="modal-title"><i class="ti ${v.icon}" style="color:var(--gold)" aria-hidden="true"></i> ${v.name}</h3>
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <span class="badge badge-gold">${v.cat}</span>
+        <span class="badge ${v.available?'badge-green':'badge-gray'}">${v.available?'Available':'Unavailable'}</span>
+        ${v.booked?'<span class="badge badge-green">Booked</span>':''}
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:12px"><div class="stars">${stars(v.rating)}</div><span style="font-size:14px;color:var(--muted)">${v.rating} (${v.reviews} reviews)</span></div>
+      <p style="font-size:14px;color:var(--charcoal-light);margin-bottom:16px;line-height:1.6">${v.desc}</p>
+      <div style="background:var(--surface);border-radius:10px;padding:14px;margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="color:var(--muted);font-size:13px">Price</span><span style="font-weight:600;color:var(--gold-dark)">${v.price}</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:13px">Location</span><span style="font-size:13px">${v.loc}</span></div>
+      </div>
+      <div class="form-group"><label class="form-label">Preferred Date</label><input class="form-input" type="date" value="${state.weddingDate}"></div>
+      <div class="form-group"><label class="form-label">Special Requirements</label><textarea class="form-input" rows="2" placeholder="Any special requirements…"></textarea></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" onclick="closeModalNow()">Cancel</button>
+        <button class="btn btn-gold" style="flex:1;justify-content:center" onclick="bookVendor(${v.id})">
+          ${v.booked?'✓ Already Booked':'Confirm Booking'}
+        </button>
+      </div>
+    </div>`;
+  document.querySelector('.modal-overlay') ? document.querySelector('.modal-overlay').innerHTML = html : showModal(html);
+}
+
+function showModal(html) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = html;
+  overlay.addEventListener('click', e => { if(e.target===overlay) overlay.remove(); });
+  document.getElementById('root').appendChild(overlay);
+}
+
+function bookVendor(id) {
+  state.vendors = state.vendors.map(v => v.id===id ? {...v,booked:!v.booked} : v);
+  document.querySelectorAll('.modal-overlay').forEach(el=>el.remove());
+  render();
+}
+
+// ─── GUESTS ──────────────────────────────────────────────────────────────────
+function renderGuests() {
+  const gs = state.guests.filter(g =>
+    !state.guestSearch ||
+    (g.first+' '+g.last).toLowerCase().includes(state.guestSearch.toLowerCase()) ||
+    g.email.toLowerCase().includes(state.guestSearch.toLowerCase())
+  );
+  const confirmed = state.guests.filter(g=>g.rsvp==='Confirmed').length;
+  const pending = state.guests.filter(g=>g.rsvp==='Pending').length;
+  const declined = state.guests.filter(g=>g.rsvp==='Declined').length;
+
+  return `
+  <div>
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h2 class="section-title">Guest Management</h2>
+          <p class="section-sub">Track RSVPs and manage your guest list</p>
+        </div>
+        <button class="btn btn-gold" onclick="showAddGuestModal()"><i class="ti ti-user-plus" aria-hidden="true"></i> ${t('addGuest')}</button>
+      </div>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:24px">
+      <div class="stat-card"><div class="stat-label">Total Invited</div><div class="stat-value">${state.guests.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Confirmed</div><div class="stat-value" style="color:#059669">${confirmed}</div></div>
+      <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" style="color:#D97706">${pending}</div></div>
+      <div class="stat-card"><div class="stat-label">Declined</div><div class="stat-value" style="color:#DC2626">${declined}</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <div style="flex:1;position:relative">
+          <i class="ti ti-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)" aria-hidden="true"></i>
+          <input class="form-input" style="padding-left:36px" placeholder="Search guests…" oninput="setState({guestSearch:this.value})">
+        </div>
+        <button class="btn btn-outline btn-sm"><i class="ti ti-download" aria-hidden="true"></i> Export CSV</button>
+        <button class="btn btn-outline btn-sm"><i class="ti ti-mail" aria-hidden="true"></i> Send RSVP</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Guest</th><th>Email</th><th>Phone</th><th>RSVP</th><th>Table</th><th>Dietary</th><th>Actions</th>
+          </tr></thead>
+          <tbody>
+            ${gs.map(g=>`
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:30px;height:30px;font-size:12px">${g.first[0]}${g.last[0]}</div><span style="font-weight:500">${g.first} ${g.last}</span></div></td>
+                <td style="color:var(--muted)">${g.email}</td>
+                <td style="color:var(--muted)">${g.phone}</td>
+                <td><span class="badge ${g.rsvp==='Confirmed'?'badge-green':g.rsvp==='Declined'?'badge-red':'badge-gold'}">${g.rsvp}</span></td>
+                <td>${g.table||'—'}</td>
+                <td style="font-size:13px">${g.dietary}</td>
+                <td>
+                  <div class="guest-row-actions">
+                    <button class="btn-icon" onclick="editGuest(${g.id})"><i class="ti ti-edit" aria-hidden="true"></i></button>
+                    <button class="btn-icon" onclick="deleteGuest(${g.id})"><i class="ti ti-trash" aria-hidden="true"></i></button>
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:16px">Table Assignments</h3>
+      <div class="grid-3">
+        ${[1,2,3].map(t=>{
+          const tableGuests = state.guests.filter(g=>g.table===t);
+          return `
+            <div style="background:var(--surface);border-radius:10px;padding:14px;border:1px solid var(--border)">
+              <div style="font-family:var(--font-display);font-size:16px;margin-bottom:10px">Table ${t} <span style="font-size:13px;color:var(--muted)">(${tableGuests.length} guests)</span></div>
+              ${tableGuests.map(g=>`<div style="font-size:13px;padding:4px 0;border-bottom:1px solid var(--border)">${g.first} ${g.last}</div>`).join('')||'<div style="color:var(--muted);font-size:13px">No guests assigned</div>'}
+            </div>`;
+        }).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function showAddGuestModal() {
+  showModal(`
+    <div class="modal" onclick="event.stopPropagation()">
+      <h3 class="modal-title"><i class="ti ti-user-plus" style="color:var(--gold)" aria-hidden="true"></i> Add Guest</h3>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">${t('firstName')}</label><input class="form-input" id="gf" placeholder="Sarah"></div>
+        <div class="form-group"><label class="form-label">${t('lastName')}</label><input class="form-input" id="gl" placeholder="Johnson"></div>
+      </div>
+      <div class="form-group"><label class="form-label">${t('email')}</label><input class="form-input" id="ge" type="email" placeholder="sarah@email.com"></div>
+      <div class="form-group"><label class="form-label">${t('phone')}</label><input class="form-input" id="gp" type="tel" placeholder="9876543210"></div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">${t('rsvpStatus')}</label>
+          <select class="form-input form-select" id="gr">
+            <option>Pending</option><option>Confirmed</option><option>Declined</option>
+          </select></div>
+        <div class="form-group"><label class="form-label">${t('table')}</label>
+          <select class="form-input form-select" id="gt">
+            <option value="1">Table 1</option><option value="2">Table 2</option><option value="3">Table 3</option>
+          </select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Dietary Preference</label>
+        <select class="form-input form-select" id="gd"><option>Vegetarian</option><option>Non-Veg</option><option>Vegan</option><option>Jain</option></select></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" onclick="document.querySelectorAll('.modal-overlay').forEach(e=>e.remove())">${t('cancel')}</button>
+        <button class="btn btn-gold" style="flex:1;justify-content:center" onclick="addGuest()">Add Guest</button>
+      </div>
+    </div>`);
+}
+
+function addGuest() {
+  const id = Math.max(...state.guests.map(g=>g.id))+1;
+  state.guests.push({
+    id, first:document.getElementById('gf')?.value||'Guest', last:document.getElementById('gl')?.value||'',
+    email:document.getElementById('ge')?.value||'', phone:document.getElementById('gp')?.value||'',
+    rsvp:document.getElementById('gr')?.value||'Pending', table:parseInt(document.getElementById('gt')?.value)||1,
+    dietary:document.getElementById('gd')?.value||'Vegetarian'
+  });
+  document.querySelectorAll('.modal-overlay').forEach(e=>e.remove());
+  render();
+}
+
+function deleteGuest(id) {
+  state.guests = state.guests.filter(g=>g.id!==id);
+  render();
+}
+function editGuest(id) { showAddGuestModal(); }
+
+// ─── BUDGET ──────────────────────────────────────────────────────────────────
+function renderBudget() {
+  const total = BUDGET_CATS.reduce((s,c)=>s+c.allocated,0);
+  const spent = BUDGET_CATS.reduce((s,c)=>s+c.spent,0);
+  const remaining = total - spent;
+
+  return `
+  <div>
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h2 class="section-title">Budget Calculator</h2>
+          <p class="section-sub">Track every rupee of your wedding budget</p>
+        </div>
+        <button class="btn btn-outline"><i class="ti ti-download" aria-hidden="true"></i> Export PDF</button>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:24px">
+      <div class="stat-card card-gold"><div class="stat-label">Total Budget</div><div class="stat-value">${fmt(total)}</div></div>
+      <div class="stat-card"><div class="stat-label">Total Spent</div><div class="stat-value" style="color:#D97706">${fmt(spent)}</div><div class="stat-change">${Math.round(spent/total*100)}% of budget used</div></div>
+      <div class="stat-card"><div class="stat-label">Remaining</div><div class="stat-value" style="color:#059669">${fmt(remaining)}</div><div class="stat-change stat-up">${Math.round(remaining/total*100)}% available</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:16px">Category Breakdown</h3>
+        ${BUDGET_CATS.map(c=>{
+          const pct = Math.round(c.spent/c.allocated*100);
+          return `
+            <div class="budget-category">
+              <div class="budget-dot" style="background:${c.color}"></div>
+              <div style="flex:1">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                  <span style="font-size:13px;font-weight:500">${c.cat}</span>
+                  <span style="font-size:12px;color:var(--muted)">${fmt(c.spent)} / ${fmt(c.allocated)}</span>
+                </div>
+                <div class="progress"><div class="progress-bar" style="width:${Math.min(pct,100)}%;background:${c.color}"></div></div>
+              </div>
+              <span style="font-size:12px;font-weight:600;color:${pct>100?'#DC2626':'var(--muted)'}; margin-left:10px;min-width:35px;text-align:right">${pct}%</span>
+            </div>`;
+        }).join('')}
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:16px">Spending Chart</h3>
+          <div style="position:relative;height:220px"><canvas id="chartSpend" role="img" aria-label="Budget spending bar chart"></canvas></div>
+        </div>
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Add Expense</h3>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-input form-select"><option>Venue & Hall</option><option>Catering</option><option>Photography</option><option>Other</option></select>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label class="form-label">Item</label><input class="form-input" placeholder="Venue booking"></div>
+            <div class="form-group"><label class="form-label">Amount (₹)</label><input class="form-input" type="number" placeholder="50000"></div>
+          </div>
+          <button class="btn btn-gold" style="width:100%;justify-content:center">Record Expense</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── CHECKLIST ───────────────────────────────────────────────────────────────
+function renderChecklist() {
+  const cats = ['All',...new Set(state.checklist.map(c=>c.cat))];
+  const filtered = state.checklist.filter(c => state.checklistFilter==='All' || c.cat===state.checklistFilter);
+  const done = filtered.filter(c=>c.done).length;
+
+  return `
+  <div>
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h2 class="section-title">Wedding Checklist</h2>
+          <p class="section-sub">${done}/${filtered.length} tasks completed</p>
+        </div>
+        <button class="btn btn-gold" onclick="showAddTaskModal()"><i class="ti ti-plus" aria-hidden="true"></i> Add Task</button>
+      </div>
+    </div>
+
+    <div class="progress" style="height:8px;margin-bottom:20px"><div class="progress-bar" style="width:${Math.round(done/state.checklist.length*100)}%"></div></div>
+
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px">
+      ${cats.map(c=>`<button class="btn ${state.checklistFilter===c?'btn-gold':'btn-ghost'} btn-sm" onclick="setState({checklistFilter:'${c}'})">${c}</button>`).join('')}
+    </div>
+
+    <div class="card">
+      ${filtered.map(c=>`
+        <div class="checklist-item">
+          <div class="check-box ${c.done?'checked':''}" onclick="toggleCheck(${c.id})">
+            ${c.done?'<i class="ti ti-check" aria-hidden="true"></i>':''}
+          </div>
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:${c.done?'400':'500'};text-decoration:${c.done?'line-through':'none'};color:${c.done?'var(--muted)':'var(--charcoal)'}">${c.task}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px">Due: ${c.dueDate}</div>
+          </div>
+          <span class="badge badge-gold" style="font-size:11px">${c.cat}</span>
+          <button class="btn-icon" style="margin-left:6px" onclick="deleteTask(${c.id})"><i class="ti ti-trash" aria-hidden="true"></i></button>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+function toggleCheck(id) {
+  state.checklist = state.checklist.map(c => c.id===id ? {...c,done:!c.done} : c);
+  render();
+}
+function deleteTask(id) { state.checklist = state.checklist.filter(c=>c.id!==id); render(); }
+
+function showAddTaskModal() {
+  showModal(`
+    <div class="modal" onclick="event.stopPropagation()">
+      <h3 class="modal-title">Add Checklist Task</h3>
+      <div class="form-group"><label class="form-label">Task Name</label><input class="form-input" id="tn" placeholder="e.g. Book florist"></div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">Category</label>
+          <select class="form-input form-select" id="tc"><option>Venue</option><option>Food</option><option>Media</option><option>Beauty</option><option>Admin</option><option>Logistics</option><option>Decor</option><option>Travel</option><option>Attire</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Due Date</label><input class="form-input" type="date" id="td" value="2025-01-15"></div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" onclick="document.querySelectorAll('.modal-overlay').forEach(e=>e.remove())">${t('cancel')}</button>
+        <button class="btn btn-gold" style="flex:1;justify-content:center" onclick="addTask()">Add Task</button>
+      </div>
+    </div>`);
+}
+
+function addTask() {
+  const id = Math.max(...state.checklist.map(c=>c.id))+1;
+  state.checklist.push({id, task:document.getElementById('tn')?.value||'New Task', cat:document.getElementById('tc')?.value||'Admin', done:false, dueDate:document.getElementById('td')?.value||'2025-01-15'});
+  document.querySelectorAll('.modal-overlay').forEach(e=>e.remove());
+  render();
+}
+
+// ─── INVITATIONS ─────────────────────────────────────────────────────────────
+function renderInvitations() {
+  const templates = [
+    {name:'Royal Gold',bg:'linear-gradient(145deg,#FEFCF3,#FFF8E7)',border:'#C9A84C'},
+    {name:'Rose Blush',bg:'linear-gradient(145deg,#FFF0F5,#FFE8ED)',border:'#E8A0B0'},
+    {name:'Midnight',bg:'linear-gradient(145deg,#1A1810,#2E2A1E)',border:'#C9A84C'},
+  ];
+
+  return `
+  <div>
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h2 class="section-title">Digital Invitations</h2>
+          <p class="section-sub">Create and share beautiful wedding invitations</p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline"><i class="ti ti-share" aria-hidden="true"></i> Share via WhatsApp</button>
+          <button class="btn btn-gold"><i class="ti ti-mail" aria-hidden="true"></i> Send via Email</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div>
+        <div class="tabs">
+          ${templates.map((tp,i)=>`<button class="tab ${state.invTemplate===i?'active':''}" onclick="setState({invTemplate:${i}})">${tp.name}</button>`).join('')}
+        </div>
+
+        <div class="invitation-card" style="background:${templates[state.invTemplate].bg};border-color:${templates[state.invTemplate].border}">
+          <p style="font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)">Together With Their Families</p>
+          <div class="inv-title">Request the Pleasure of Your Company</div>
+          <div class="inv-couple">${state.brideGroom.bride} & ${state.brideGroom.groom}</div>
+          <div style="font-size:22px;color:var(--gold);margin:8px 0">♦ ♦ ♦</div>
+          <div class="inv-details">
+            <strong>Saturday, 14th February 2025</strong><br>
+            At the auspicious hour of 9:30 AM<br><br>
+            <strong>The Grand Palace Banquet</strong><br>
+            No. 42, Anna Salai, Chennai — 600002<br><br>
+            Mehndi: Feb 12 · Haldi: Feb 13 · Reception: Feb 15
+          </div>
+          <div style="margin-top:20px;font-size:13px;color:var(--muted)">RSVP by January 30 · <a href="#" style="color:var(--gold-dark)">wedease.in/rsvp/sarah-rajan</a></div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:16px">Invitation Details</h3>
+          <div class="form-group"><label class="form-label">Bride's Name</label><input class="form-input" value="${state.brideGroom.bride}" oninput="state.brideGroom.bride=this.value;render()"></div>
+          <div class="form-group"><label class="form-label">Groom's Name</label><input class="form-input" value="${state.brideGroom.groom}" oninput="state.brideGroom.groom=this.value;render()"></div>
+          <div class="form-group"><label class="form-label">Wedding Date</label><input class="form-input" type="date" value="${state.weddingDate}" oninput="setState({weddingDate:this.value})"></div>
+          <div class="form-group"><label class="form-label">Venue</label><input class="form-input" value="The Grand Palace Banquet, Chennai"></div>
+          <button class="btn btn-gold" style="width:100%;justify-content:center">${t('saveChanges')}</button>
+        </div>
+
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">RSVP Tracker</h3>
+          ${[['Confirmed',state.guests.filter(g=>g.rsvp==='Confirmed').length,'badge-green'],
+             ['Pending',state.guests.filter(g=>g.rsvp==='Pending').length,'badge-gold'],
+             ['Declined',state.guests.filter(g=>g.rsvp==='Declined').length,'badge-red']].map(([l,n,b])=>`
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+              <span class="badge ${b}">${l}</span>
+              <span style="font-family:var(--font-display);font-size:22px;font-weight:700">${n}</span>
+            </div>`).join('')}
+          <div style="margin-top:12px">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Response Rate</div>
+            <div class="progress" style="height:8px"><div class="progress-bar" style="width:${Math.round(state.guests.filter(g=>g.rsvp!=='Pending').length/state.guests.length*100)}%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── GALLERY ─────────────────────────────────────────────────────────────────
+function renderGallery() {
+  const albums = ['All Photos','Pre-Wedding','Ceremony','Reception','Candid'];
+  const demoItems = Array(12).fill(0).map((_,i)=>({id:i,icon:['ti-camera','ti-photo','ti-heart','ti-flower'][i%4]}));
+
+  return `
+  <div>
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h2 class="section-title">Gallery Management</h2>
+          <p class="section-sub">Upload and organize your wedding photos</p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline"><i class="ti ti-download" aria-hidden="true"></i> Download All</button>
+          <button class="btn btn-gold"><i class="ti ti-upload" aria-hidden="true"></i> Upload Photos</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      ${albums.map((a,i)=>`<button class="tab ${i===0?'active':''}">${a}</button>`).join('')}
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item" style="border:2px dashed var(--border-strong);flex-direction:column;gap:8px" onclick="alert('Upload via Cloudinary integration')">
+        <i class="ti ti-cloud-upload" aria-hidden="true"></i>
+        <span style="font-size:12px;color:var(--muted)">Upload</span>
+      </div>
+      ${demoItems.map(item=>`
+        <div class="gallery-item" style="background:linear-gradient(135deg,var(--gold-pale),rgba(201,168,76,0.1))">
+          <i class="ti ${item.icon}" aria-hidden="true" style="font-size:36px;color:var(--gold-light)"></i>
+          <div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0;transition:opacity 0.2s"
+               onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">
+            <button class="btn-icon" style="background:rgba(255,255,255,0.9)"><i class="ti ti-eye" aria-hidden="true"></i></button>
+            <button class="btn-icon" style="background:rgba(255,255,255,0.9)"><i class="ti ti-download" aria-hidden="true"></i></button>
+            <button class="btn-icon" style="background:rgba(255,255,255,0.9)"><i class="ti ti-trash" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Storage Overview</h3>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:13px;color:var(--muted)">Used: 482 MB</span>
+        <span style="font-size:13px;color:var(--muted)">Free tier: 10 GB (Cloudinary)</span>
+      </div>
+      <div class="progress"><div class="progress-bar" style="width:5%"></div></div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">Photos are stored securely on Cloudinary free tier. 9.5 GB remaining.</p>
+    </div>
+  </div>`;
+}
+
+// ─── WEBSITE GENERATOR ───────────────────────────────────────────────────────
+function renderWebsite() {
+  const themes = [
+    {name:'Royal Gold',primary:'#C9A84C'},
+    {name:'Blush Pink',primary:'#E8A0B0'},
+    {name:'Forest Green',primary:'#4A8060'},
+  ];
+  const th = themes[state.websiteTheme];
+
+  return `
+  <div>
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h2 class="section-title">Wedding Website Generator</h2>
+          <p class="section-sub">Create your free personalized wedding website</p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline"><i class="ti ti-external-link" aria-hidden="true"></i> Preview</button>
+          <button class="btn btn-gold"><i class="ti ti-rocket" aria-hidden="true"></i> Publish Website</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Theme</h3>
+          <div style="display:flex;gap:10px">
+            ${themes.map((t,i)=>`
+              <div onclick="setState({websiteTheme:${i}})" style="flex:1;border:2px solid ${state.websiteTheme===i?t.primary:'var(--border)'};border-radius:10px;padding:14px;cursor:pointer;text-align:center;transition:border-color 0.2s">
+                <div style="width:32px;height:32px;border-radius:50%;background:${t.primary};margin:0 auto 8px"></div>
+                <div style="font-size:13px;font-weight:500">${t.name}</div>
+              </div>`).join('')}
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Website URL</h3>
+          <div style="display:flex;gap:8px">
+            <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px 0 0 8px;padding:10px 12px;font-size:13px;color:var(--muted);white-space:nowrap">wedease.in/</span>
+            <input class="form-input" style="border-radius:0 8px 8px 0;flex:1" value="sarah-rajan-2025">
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin-top:8px">Your website will be live at: <strong>wedease.in/sarah-rajan-2025</strong></p>
+        </div>
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Sections</h3>
+          ${['Our Story','Event Schedule','RSVP Form','Photo Gallery','Venue Map','Registry'].map(s=>`
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+              <span style="font-size:14px">${s}</span>
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+                <input type="checkbox" checked style="accent-color:var(--gold)">
+                <span style="font-size:12px;color:var(--muted)">Enabled</span>
+              </label>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:8px">
+          <div style="display:flex;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:#FF5F57"></div><div style="width:10px;height:10px;border-radius:50%;background:#FEBC2E"></div><div style="width:10px;height:10px;border-radius:50%;background:#28C840"></div></div>
+          <span style="font-size:12px;color:var(--muted);flex:1;text-align:center">wedease.in/sarah-rajan-2025</span>
+        </div>
+        <div class="website-preview">
+          <div class="wp-hero">
+            <p style="font-size:12px;letter-spacing:0.15em;opacity:0.6">We're Getting Married</p>
+            <div class="wp-hero-gold">${state.brideGroom.bride} & ${state.brideGroom.groom}</div>
+            <p style="opacity:0.7;font-size:14px">February 14, 2025 · Chennai</p>
+            <div style="display:flex;justify-content:center;gap:20px;margin-top:20px">
+              ${[['87','Days'],['12','Hours'],['34','Mins']].map(([n,l])=>`<div style="text-align:center"><div style="font-size:28px;font-weight:700;color:var(--gold-light)">${n}</div><div style="font-size:11px;opacity:0.6;text-transform:uppercase;letter-spacing:0.1em">${l}</div></div>`).join('')}
+            </div>
+          </div>
+          <div class="wp-section" style="background:var(--ivory)">
+            <h3 style="font-family:var(--font-display);font-size:22px;color:${th.primary};margin-bottom:8px">Our Story</h3>
+            <p style="font-size:13px;color:var(--muted);max-width:300px;margin:0 auto">We met at a mutual friend's wedding in 2022 and knew instantly that our story was just beginning…</p>
+          </div>
+          <div class="wp-section" style="background:var(--white);padding:24px">
+            <h3 style="font-family:var(--font-display);font-size:18px;color:${th.primary};margin-bottom:12px">Events</h3>
+            ${[['Mehendi','Feb 12, 2025','7:00 PM'],['Wedding','Feb 14, 2025','9:30 AM'],['Reception','Feb 15, 2025','6:00 PM']].map(([e,d,ti])=>`
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px">
+                <strong style="color:${th.primary}">${e}</strong><span style="color:var(--muted)">${d} · ${ti}</span>
+              </div>`).join('')}
+          </div>
+          <div class="wp-section" style="background:var(--surface);padding:20px">
+            <button style="background:${th.primary};color:#fff;border:none;border-radius:8px;padding:10px 24px;font-family:var(--font-body);cursor:pointer">RSVP Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── ADMIN ───────────────────────────────────────────────────────────────────
+function renderAdmin() {
+  const subPage = state.page;
+  const tabs = [
+    {id:'admin',label:'Overview',icon:'ti-layout-dashboard'},
+    {id:'a-users',label:'Users',icon:'ti-users'},
+    {id:'a-vendors',label:'Vendors',icon:'ti-building-store'},
+    {id:'a-bookings',label:'Bookings',icon:'ti-calendar'},
+    {id:'a-analytics',label:'Analytics',icon:'ti-chart-bar'},
+  ];
+
+  const content = () => {
+    if(subPage==='a-users') return `
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Plan</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>${ADMIN_USERS.map(u=>`
+            <tr>
+              <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:30px;height:30px;font-size:12px">${initials(u.name)}</div><span style="font-weight:500">${u.name}</span></div></td>
+              <td style="color:var(--muted)">${u.email}</td>
+              <td><span class="badge ${u.role==='Couple'?'badge-blue':u.role==='Vendor'?'badge-gold':'badge-red'}">${u.role}</span></td>
+              <td style="font-size:13px">${u.plan}</td>
+              <td style="color:var(--muted);font-size:13px">${u.joined}</td>
+              <td><span class="badge ${u.status==='Active'?'badge-green':'badge-gold'}">${u.status}</span></td>
+              <td><div style="display:flex;gap:6px"><button class="btn-icon"><i class="ti ti-edit" aria-hidden="true"></i></button><button class="btn-icon btn-danger"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td>
+            </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+
+    if(subPage==='a-vendors') return `
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Vendor</th><th>Category</th><th>Location</th><th>Rating</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>${VENDORS.map(v=>`
+            <tr>
+              <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:var(--surface);color:var(--gold-dark);font-size:16px;width:30px;height:30px"><i class="ti ${v.icon}" aria-hidden="true"></i></div><span style="font-weight:500">${v.name}</span></div></td>
+              <td><span class="badge badge-gold">${v.cat}</span></td>
+              <td style="color:var(--muted)">${v.loc}</td>
+              <td><div class="stars" style="font-size:12px">${stars(v.rating)}</div> ${v.rating}</td>
+              <td><span class="badge ${v.available?'badge-green':'badge-gray'}">${v.available?'Active':'Unavailable'}</span></td>
+              <td><div style="display:flex;gap:6px"><button class="btn btn-sm btn-outline">Approve</button><button class="btn-icon"><i class="ti ti-eye" aria-hidden="true"></i></button></div></td>
+            </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+
+    if(subPage==='a-analytics') return `
+      <div class="grid-2">
+        <div class="card"><h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Booking Trends</h3><div style="position:relative;height:240px"><canvas id="chartAdmin" role="img" aria-label="Admin booking trends bar chart"></canvas></div></div>
+        <div class="card"><h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Revenue by Category</h3><div style="position:relative;height:240px"><canvas id="chartRev" role="img" aria-label="Revenue by category chart"></canvas></div></div>
+      </div>`;
+
+    // Default overview
+    return `
+      <div class="grid-4" style="margin-bottom:24px">
+        <div class="stat-card"><div class="stat-label">Total Users</div><div class="stat-value">1,284</div><div class="stat-change stat-up">+12% this month</div></div>
+        <div class="stat-card"><div class="stat-label">Active Vendors</div><div class="stat-value">342</div><div class="stat-change stat-up">+8% this month</div></div>
+        <div class="stat-card"><div class="stat-label">Total Bookings</div><div class="stat-value">2,891</div><div class="stat-change stat-up">+24% this month</div></div>
+        <div class="stat-card"><div class="stat-label">Platform Revenue</div><div class="stat-value">₹18.4L</div><div class="stat-change stat-up">+15% MoM</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Recent Signups</h3>
+          ${ADMIN_USERS.slice(0,4).map(u=>`
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+              <div class="avatar" style="width:32px;height:32px;font-size:13px">${initials(u.name)}</div>
+              <div style="flex:1"><div style="font-size:14px;font-weight:500">${u.name}</div><div style="font-size:12px;color:var(--muted)">${u.email}</div></div>
+              <span class="badge badge-gold" style="font-size:11px">${u.role}</span>
+            </div>`).join('')}
+        </div>
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Pending Approvals</h3>
+          ${ADMIN_USERS.filter(u=>u.status==='Pending').map(u=>`
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+              <div class="avatar" style="width:32px;height:32px;font-size:13px">${initials(u.name)}</div>
+              <div style="flex:1"><div style="font-size:14px;font-weight:500">${u.name}</div><div style="font-size:12px;color:var(--muted)">${u.role}</div></div>
+              <button class="btn btn-gold btn-sm">Approve</button>
+            </div>`).join('')||'<p style="color:var(--muted);font-size:14px">No pending approvals</p>'}
+        </div>
+      </div>`;
+  };
+
+  return `
+  <div>
+    <div class="page-header">
+      <h2 class="section-title">Admin Panel</h2>
+      <p class="section-sub">Manage the entire WedEase platform</p>
+    </div>
+    <div class="tabs">
+      ${tabs.map(tab=>`<button class="tab ${state.page===tab.id?'active':''}" onclick="setState({page:'${tab.id}'})">
+        <i class="ti ${tab.icon}" style="margin-right:4px" aria-hidden="true"></i>${tab.label}
+      </button>`).join('')}
+    </div>
+    ${content()}
+  </div>`;
+}
+
+// ─── VENDOR DASHBOARD ────────────────────────────────────────────────────────
+function renderVendorDash() {
+  return `
+  <div>
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h2 class="section-title">Vendor Dashboard</h2>
+          <p class="section-sub">Lumina Frames Studio — Photography</p>
+        </div>
+        <span class="badge badge-green"><i class="ti ti-circle-check" aria-hidden="true"></i> Verified Vendor</span>
+      </div>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:24px">
+      <div class="stat-card card-gold"><div class="stat-label">Total Bookings</div><div class="stat-value">48</div><div class="stat-change stat-up">+6 this month</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue (Month)</div><div class="stat-value">₹2.4L</div><div class="stat-change stat-up">+18% vs last</div></div>
+      <div class="stat-card"><div class="stat-label">Avg Rating</div><div class="stat-value">4.9</div><div class="stat-change"><div class="stars" style="font-size:13px">${stars(4.9)}</div></div></div>
+      <div class="stat-card"><div class="stat-label">Profile Views</div><div class="stat-value">1,284</div><div class="stat-change stat-up">+32% this week</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:16px">Upcoming Bookings</h3>
+        ${[
+          {couple:'Sarah & Rajan',date:'Feb 14, 2025',pkg:'Full Day Coverage',status:'Confirmed',amt:'₹45,000'},
+          {couple:'Priya & Arjun',date:'Feb 28, 2025',pkg:'Engagement Shoot',status:'Confirmed',amt:'₹18,000'},
+          {couple:'Meena & Karthik',date:'Mar 15, 2025',pkg:'Full Day Coverage',status:'Pending',amt:'₹45,000'},
+          {couple:'Deepa & Suresh',date:'Apr 5, 2025',pkg:'Pre-Wedding + Wedding',status:'Pending',amt:'₹60,000'},
+        ].map(b=>`
+          <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <span style="font-weight:500;font-size:14px">${b.couple}</span>
+              <span class="badge ${b.status==='Confirmed'?'badge-green':'badge-gold'}">${b.status}</span>
+            </div>
+            <div style="font-size:12px;color:var(--muted)">${b.date} · ${b.pkg} · <strong style="color:var(--gold-dark)">${b.amt}</strong></div>
+          </div>`).join('')}
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Monthly Revenue</h3>
+          <div style="position:relative;height:180px"><canvas id="chartVendor" role="img" aria-label="Vendor monthly revenue chart"></canvas></div>
+        </div>
+        <div class="card">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px">Recent Reviews</h3>
+          ${[
+            {name:'Sarah J.',rating:5,text:'Absolutely amazing photographer! Every moment captured perfectly.'},
+            {name:'Priya K.',rating:5,text:'Professional, creative, and so easy to work with. Highly recommend!'},
+          ].map(r=>`
+            <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                <div class="avatar" style="width:28px;height:28px;font-size:11px">${initials(r.name)}</div>
+                <span style="font-weight:500;font-size:13px">${r.name}</span>
+                <div class="stars" style="font-size:12px">${stars(r.rating)}</div>
+              </div>
+              <p style="font-size:13px;color:var(--muted);font-style:italic">"${r.text}"</p>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── CHARTS ──────────────────────────────────────────────────────────────────
+function renderCharts() {
+  setTimeout(() => {
+    const isDark = state.dark;
+    const txtColor = isDark ? '#D4C9A8' : '#4A4538';
+    const gridColor = isDark ? 'rgba(212,175,55,0.1)' : 'rgba(201,168,76,0.1)';
+
+    const chartDefaults = {
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:gridColor},ticks:{color:txtColor,font:{family:'Jost'}}},
+              y:{grid:{color:gridColor},ticks:{color:txtColor,font:{family:'Jost'}}}}
+    };
+
+    // Budget donut
+    const cb = document.getElementById('chartBudget');
+    if(cb) {
+      if(window._chartB) window._chartB.destroy();
+      window._chartB = new Chart(cb, {
+        type:'doughnut',
+        data:{
+          labels:BUDGET_CATS.slice(0,5).map(c=>c.cat),
+          datasets:[{data:BUDGET_CATS.slice(0,5).map(c=>c.spent),backgroundColor:BUDGET_CATS.slice(0,5).map(c=>c.color),borderWidth:2,borderColor:isDark?'#1A1810':'#fff'}]
+        },
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:txtColor,font:{family:'Jost'},boxWidth:10,padding:8}}}}
+      });
+    }
+
+    // Guest pie
+    const cg = document.getElementById('chartGuest');
+    if(cg) {
+      if(window._chartG) window._chartG.destroy();
+      const conf = GUESTS.filter(g=>g.rsvp==='Confirmed').length;
+      const pend = GUESTS.filter(g=>g.rsvp==='Pending').length;
+      const decl = GUESTS.filter(g=>g.rsvp==='Declined').length;
+      window._chartG = new Chart(cg, {
+        type:'pie',
+        data:{labels:['Confirmed','Pending','Declined'],datasets:[{data:[conf,pend,decl],backgroundColor:['#059669','#D97706','#DC2626'],borderWidth:2,borderColor:isDark?'#1A1810':'#fff'}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}
+      });
+    }
+
+    // Budget spending bar
+    const cs = document.getElementById('chartSpend');
+    if(cs) {
+      if(window._chartS) window._chartS.destroy();
+      window._chartS = new Chart(cs, {
+        type:'bar',
+        data:{labels:BUDGET_CATS.map(c=>c.cat.split(' ')[0]),datasets:[
+          {label:'Allocated',data:BUDGET_CATS.map(c=>c.allocated),backgroundColor:'rgba(201,168,76,0.2)',borderColor:'#C9A84C',borderWidth:1},
+          {label:'Spent',data:BUDGET_CATS.map(c=>c.spent),backgroundColor:'rgba(201,168,76,0.7)',borderColor:'#C9A84C',borderWidth:1}
+        ]},
+        options:{...chartDefaults,responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:txtColor,font:{family:'Jost'},boxWidth:10}}}}
+      });
+    }
+
+    // Admin chart
+    const ca = document.getElementById('chartAdmin');
+    if(ca) {
+      if(window._chartA) window._chartA.destroy();
+      window._chartA = new Chart(ca, {
+        type:'bar',
+        data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],datasets:[{label:'Bookings',data:[45,72,58,89,112,98,134,156],backgroundColor:'rgba(201,168,76,0.7)',borderColor:'#C9A84C',borderWidth:1}]},
+        options:{...chartDefaults,responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}
+      });
+    }
+
+    // Revenue chart
+    const cr = document.getElementById('chartRev');
+    if(cr) {
+      if(window._chartR) window._chartR.destroy();
+      window._chartR = new Chart(cr, {
+        type:'doughnut',
+        data:{labels:['Halls','Photography','Makeup','Catering','Decor'],datasets:[{data:[35,25,15,18,7],backgroundColor:['#C9A84C','#7CB9E8','#D4A5C9','#90C9A0','#F0C060'],borderWidth:2,borderColor:isDark?'#1A1810':'#fff'}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:txtColor,font:{family:'Jost'},boxWidth:10,padding:8}}}}
+      });
+    }
+
+    // Vendor revenue
+    const cv = document.getElementById('chartVendor');
+    if(cv) {
+      if(window._chartV) window._chartV.destroy();
+      window._chartV = new Chart(cv, {
+        type:'line',
+        data:{labels:['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb'],datasets:[{label:'Revenue (₹K)',data:[120,150,180,210,195,240,220,290],borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,0.1)',borderWidth:2,fill:true,tension:0.4,pointBackgroundColor:'#C9A84C'}]},
+        options:{...chartDefaults,responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}
+      });
+    }
+  }, 80);
+}
+
+// ─── MODALS ──────────────────────────────────────────────────────────────────
+function closeModal(e) {
+  if(e.target.classList.contains('modal-overlay')) {
+    document.querySelectorAll('.modal-overlay').forEach(el=>el.remove());
+  }
+}
+function closeModalNow() { document.querySelectorAll('.modal-overlay').forEach(el=>el.remove()); }
+
+// ─── STATE & BIND ─────────────────────────────────────────────────────────────
+function setState(updates) {
+  Object.assign(state, updates);
+  render();
+}
+
+function toggleLang() { setState({lang: state.lang==='en'?'ta':'en'}); }
+function toggleDark() {
+  state.dark = !state.dark;
+  document.body.className = state.dark ? 'dark' : '';
+  render();
+}
+function doLogout() {
+  state.user = null; state.page = 'auth'; state.userRole = 'couple';
+  render();
+}
+
+function bindAll() {
+  document.body.className = state.dark ? 'dark' : '';
+}
+
+// Expose functions globally
+window.setState = setState;
+window.toggleLang = toggleLang;
+window.toggleDark = toggleDark;
+window.doLogin = doLogin;
+window.doLogout = doLogout;
+window.openVendorModal = openVendorModal;
+window.bookVendor = bookVendor;
+window.showAddGuestModal = showAddGuestModal;
+window.addGuest = addGuest;
+window.deleteGuest = deleteGuest;
+window.editGuest = editGuest;
+window.toggleCheck = toggleCheck;
+window.deleteTask = deleteTask;
+window.showAddTaskModal = showAddTaskModal;
+window.addTask = addTask;
+window.closeModal = closeModal;
+window.closeModalNow = closeModalNow;
+window.showModal = showModal;
+
+// Boot
+render();
+</script>
+</html>
